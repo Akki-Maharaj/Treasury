@@ -1,0 +1,87 @@
+{% extends "base.html" %}
+
+{% block title %}Treasury — Marketplace{% endblock %}
+
+{% block content %}
+{% if recommended_listings and recommended_listings|length > 0 %}
+<section class="recommended-section" style="margin-bottom: 2rem;">
+  <div class="recommended-header" style="margin-bottom: 0.75rem;">
+    <div>
+      <h2 style="margin: 0; font-size: 1.25rem;">Recommended for you</h2>
+      <span style="font-size: 0.85rem; color: #64748b; font-weight: 500;">{{ rec_subtitle }}</span>
+    </div>
+    <span class="recommended-badge" style="background:#dbeafe; color:#1e40af; border:1px solid #bfdbfe;">AI Curated</span>
+  </div>
+  <div class="horizontal-card-row">
+    {% for listing in recommended_listings %}
+      {% include "card.html" %}
+    {% endfor %}
+  </div>
+</section>
+{% endif %}
+
+
+<!-- Filter and Search Bar -->
+<div class="filter-bar">
+  <form action="/" method="GET" class="search-form">
+    {% if selected_category %}
+      <input type="hidden" name="category" value="{{ selected_category }}">
+    {% endif %}
+    <input
+      type="text"
+      name="q"
+      class="search-input"
+      placeholder="Search listings by title..."
+      value="{{ search_query }}"
+    >
+    <button type="submit" class="btn-primary">Search</button>
+  </form>
+
+  <div class="category-tags">
+    <a href="/{% if search_query %}?q={{ search_query }}{% endif %}" class="category-pill {% if not selected_category %}active{% endif %}">
+      All Categories
+    </a>
+    {% for cat in categories %}
+      <a
+        href="/?category={{ cat }}{% if search_query %}&q={{ search_query }}{% endif %}"
+        class="category-pill {% if selected_category == cat %}active{% endif %}"
+      >
+        {{ cat }}
+      </a>
+    {% endfor %}
+  </div>
+</div>
+
+<!-- Listing Cards Grid -->
+{% if listings %}
+  <div class="listing-grid">
+    {% for listing in listings %}
+      {% include "card.html" %}
+    {% endfor %}
+  </div>
+
+  <!-- Pagination Controls -->
+  {% if total_pages > 1 %}
+    <div class="pagination">
+      {% if page > 1 %}
+        <a href="/?page={{ page - 1 }}{% if selected_category %}&category={{ selected_category }}{% endif %}{% if search_query %}&q={{ search_query }}{% endif %}" class="page-btn">
+          &laquo; Prev
+        </a>
+      {% endif %}
+
+      <span class="page-btn active">Page {{ page }} of {{ total_pages }}</span>
+
+      {% if page < total_pages %}
+        <a href="/?page={{ page + 1 }}{% if selected_category %}&category={{ selected_category }}{% endif %}{% if search_query %}&q={{ search_query }}{% endif %}" class="page-btn">
+          Next &raquo;
+        </a>
+      {% endif %}
+    </div>
+  {% endif %}
+{% else %}
+  <div style="text-align:center; padding:3rem; color:var(--text-muted);">
+    <h3>No listings found</h3>
+    <p>Try searching with different keywords or selecting another category.</p>
+  </div>
+{% endif %}
+{% endblock %}

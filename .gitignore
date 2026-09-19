@@ -1,0 +1,10 @@
+.env
+__pycache__/
+*.pyc
+venv/
+.venv/
+app/static/uploads/
+car_pics/
+ECOMMERCE_PRODUCT_IMAGES/
+used car/
+*.csv

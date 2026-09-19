@@ -1,0 +1,43 @@
+{% extends "base.html" %}
+
+{% block title %}Create Account — Treasury{% endblock %}
+
+{% block content %}
+<div class="form-card">
+  <h1 style="font-size:1.5rem; font-weight:700; margin-bottom:1.25rem;">Create Your Account</h1>
+
+  {% if error %}
+    <div class="alert-error">{{ error }}</div>
+  {% endif %}
+
+  <form action="/signup" method="POST">
+    <div class="form-group">
+      <label class="form-label" for="name">Full Name</label>
+      <input type="text" id="name" name="name" class="form-input" placeholder="e.g. Jane Doe" required autofocus>
+    </div>
+
+    <div class="form-group">
+      <label class="form-label" for="email">Email Address</label>
+      <input type="email" id="email" name="email" class="form-input" placeholder="jane@example.com" required>
+    </div>
+
+    <div class="form-group">
+      <label class="form-label" for="password">Password</label>
+      <input type="password" id="password" name="password" class="form-input" placeholder="Choose a password" required>
+    </div>
+
+    <div class="form-group">
+      <label class="form-label" for="phone">Phone Number (8-digit demo)</label>
+      <input type="text" id="phone" name="phone" class="form-input" placeholder="e.g. 91234567" pattern="\d{8}" title="Please enter an 8-digit phone number">
+    </div>
+
+    <button type="submit" class="btn-primary" style="width:100%; justify-content:center; padding:0.75rem; font-size:1rem; margin-top:0.5rem;">
+      Create Account
+    </button>
+  </form>
+
+  <p style="font-size:0.9rem; color:var(--text-muted); margin-top:1.5rem; text-align:center;">
+    Already have an account? <a href="/login" style="color:var(--primary); font-weight:600;">Sign in here</a>
+  </p>
+</div>
+{% endblock %}

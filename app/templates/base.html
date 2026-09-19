@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>{% block title %}Treasury Marketplace{% endblock %}</title>
+  <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+  <nav class="navbar">
+    <div class="nav-container">
+      <div class="brand-section">
+        <a href="/" class="brand-link">Treasury</a>
+        <span class="brand-tagline">"One man's trash is another man's treasure"</span>
+      </div>
+      <div class="nav-links">
+        <a href="/" class="nav-link">Home</a>
+        <a href="/sell" class="nav-link">Sell</a>
+        {% if current_user %}
+          <a href="/wishlist" class="nav-link">Wishlist</a>
+          <a href="/my-listings" class="nav-link">My Listings</a>
+          <span style="font-size:0.85rem; color:var(--text-muted);">Hi, {{ current_user.name }}</span>
+          <a href="/logout" class="btn-outline">Logout</a>
+        {% else %}
+          <a href="/login" class="nav-link">Login</a>
+          <a href="/signup" class="btn-primary">Sign Up</a>
+        {% endif %}
+      </div>
+    </div>
+  </nav>
+
+  <main class="main-content">
+    {% block content %}{% endblock %}
+  </main>
+
+  <script>
+    // AJAX wishlist toggle handler without page reload
+    function toggleWishlist(listingId, btnElement) {
+      fetch(`/wishlist/toggle/${listingId}`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' }
+      })
+      .then(res => {
+        if (res.status === 401) {
+          window.location.href = `/login?next=${encodeURIComponent(window.location.pathname)}`;
+          return null;
+        }
+        return res.json();
+      })
+      .then(data => {
+        if (!data) return;
+        if (data.saved) {
+          btnElement.classList.add('active');
+        } else {
+          btnElement.classList.remove('active');
+        }
+      })
+      .catch(err => console.error('Wishlist error:', err));
+    }
+  </script>
+</body>
+</html>

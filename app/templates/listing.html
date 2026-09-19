@@ -1,0 +1,118 @@
+{% extends "base.html" %}
+
+{% block title %}{{ listing.title }} — Treasury{% endblock %}
+
+{% block content %}
+<div class="detail-container">
+  <!-- Image Gallery -->
+  <div class="detail-gallery">
+    <div class="gallery-main">
+      {% set first_img = listing.images[0].image_url if listing.images and listing.images|length > 0 else '' %}
+      {% if first_img.startswith('http') or first_img.startswith('/') %}
+        <img id="main-image" src="{{ first_img }}" alt="{{ listing.title }}">
+      {% elif first_img %}
+        <img id="main-image" src="/{{ first_img }}" alt="{{ listing.title }}">
+      {% else %}
+        <div style="display:flex;align-items:center;justify-content:center;height:100%;color:#94a3b8;">No Image Available</div>
+      {% endif %}
+    </div>
+
+    {% if listing.images and listing.images|length > 1 %}
+      <div class="gallery-thumbs">
+        {% for img in listing.images %}
+          {% set src = img.image_url if img.image_url.startswith('http') or img.image_url.startswith('/') else '/' ~ img.image_url %}
+          <img
+            src="{{ src }}"
+            alt="Thumbnail {{ loop.index }}"
+            class="gallery-thumb {% if loop.first %}active{% endif %}"
+            onclick="setMainImage('{{ src }}', this)"
+          >
+        {% endfor %}
+      </div>
+    {% endif %}
+  </div>
+
+  <!-- Detail Information -->
+  <div class="detail-info">
+    <span class="card-category">{{ listing.category }}</span>
+    <h1 style="font-size:1.75rem; font-weight:700; line-height:1.25;">{{ listing.title }}</h1>
+    <div class="detail-price">${{ "%.2f"|format(listing.price) }}</div>
+
+    <div style="display:flex; gap:0.75rem; align-items:center;">
+      <span style="font-size:0.9rem; background:#e2e8f0; padding:0.25rem 0.6rem; border-radius:6px; font-weight:600;">
+        Condition: {{ listing.condition }}
+      </span>
+
+      <button
+        class="wishlist-btn {% if is_saved %}active{% endif %}"
+        style="position:static; width:38px; height:38px; border:1px solid var(--border);"
+        onclick="toggleWishlist('{{ listing.id }}', this)"
+        title="Toggle Wishlist"
+      >
+        <svg class="heart-icon" viewBox="0 0 24 24">
+          <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/>
+        </svg>
+      </button>
+    </div>
+
+    <!-- Seller Contact Box -->
+    <div class="detail-seller-box">
+      <div style="font-size:0.85rem; color:var(--text-muted); font-weight:600;">SELLER INFORMATION</div>
+      <div style="font-size:1.05rem; font-weight:700; margin-top:0.25rem;">
+        {{ listing.user.name if listing.user else 'Verified Seller' }}
+      </div>
+      <div style="font-size:0.95rem; margin-top:0.35rem; color:#0369a1; font-weight:600;">
+        Contact number (demo): {{ listing.user.phone if listing.user and listing.user.phone else '98765432' }}
+      </div>
+    </div>
+
+    <!-- Description -->
+    {% if listing.description %}
+      <div>
+        <h3 style="font-size:1rem; font-weight:700; margin-bottom:0.4rem;">Description</h3>
+        <p style="color:#334155; font-size:0.95rem; white-space:pre-line;">{{ listing.description }}</p>
+      </div>
+    {% endif %}
+
+    <!-- Key Attributes Table -->
+    {% if listing.attributes and listing.attributes|length > 0 %}
+      <div>
+        <h3 style="font-size:1rem; font-weight:700; margin-bottom:0.4rem;">Specifications & Attributes</h3>
+        <table class="attributes-table">
+          <tbody>
+            {% for attr in listing.attributes %}
+              <tr>
+                <td>{{ attr.key }}</td>
+                <td>{{ attr.value }}</td>
+              </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+    {% endif %}
+  </div>
+</div>
+
+{% if similar_items and similar_items|length > 0 %}
+<section style="margin-top: 3rem; margin-bottom: 2rem;">
+  <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom: 1rem;">
+    <h2 style="font-size: 1.35rem; font-weight: 700; color: var(--text-main);">Similar items</h2>
+    <span style="font-size: 0.8rem; background: #f1f5f9; color: #475569; padding: 0.2rem 0.6rem; border-radius: 9999px; font-weight: 600;">Vector Similarity</span>
+  </div>
+  <div class="horizontal-card-row">
+    {% for listing in similar_items %}
+      {% include "card.html" %}
+    {% endfor %}
+  </div>
+</section>
+{% endif %}
+
+
+<script>
+  function setMainImage(src, thumbElement) {
+    document.getElementById('main-image').src = src;
+    document.querySelectorAll('.gallery-thumb').forEach(t => t.classList.remove('active'));
+    thumbElement.classList.add('active');
+  }
+</script>
+{% endblock %}

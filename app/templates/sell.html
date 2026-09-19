@@ -1,0 +1,166 @@
+{% extends "base.html" %}
+
+{% block title %}Sell an Item — Treasury{% endblock %}
+
+{% block content %}
+<div class="form-card" style="max-width: 680px;">
+  <h1 style="font-size:1.75rem; font-weight:700; margin-bottom:0.5rem;">List an Item for Sale</h1>
+  <p style="color:var(--text-muted); font-size:0.95rem; margin-bottom:1.5rem;">Fill out the details below to publish your item to the marketplace.</p>
+
+  <!-- AI Assist Box -->
+  <div class="card" style="background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 8px; padding: 1.25rem; margin-bottom: 1.5rem;">
+    <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 0.5rem;">
+      <h2 style="font-size: 1.1rem; font-weight: 600; margin: 0; display: flex; align-items: center; gap: 0.5rem;">
+        <span>✨</span> AI Listing Assistant
+      </h2>
+      <span style="font-size: 0.75rem; color: #64748b; background: #e2e8f0; padding: 0.15rem 0.5rem; border-radius: 9999px;">Optional</span>
+    </div>
+    <p style="font-size: 0.85rem; color: var(--text-muted); margin-bottom: 0.75rem;">
+      Describe what you're selling in your own words. We'll automatically fill details and ask only what's missing.
+    </p>
+
+    <div style="display: flex; gap: 0.5rem; margin-bottom: 0.75rem;">
+      <textarea id="ai-describe-input" class="form-textarea" rows="2" style="flex: 1;" placeholder="e.g. Selling my 2018 Toyota Camry, automatic, 45k miles, petrol, silver"></textarea>
+      <button type="button" id="ai-analyze-btn" class="btn-primary" style="white-space: nowrap; height: fit-content; align-self: flex-start; padding: 0.6rem 1.2rem;">
+        Analyze
+      </button>
+    </div>
+
+    <div id="ai-filled-badges" style="display: flex; flex-wrap: wrap; gap: 0.4rem; margin-bottom: 0.75rem;"></div>
+
+    <div id="ai-question-section" style="display: none; background: #ffffff; border: 1px solid #cbd5e1; border-radius: 6px; padding: 0.85rem; margin-top: 0.5rem;">
+      <label id="ai-question-prompt" class="form-label" style="font-size: 0.9rem; font-weight: 600; margin-bottom: 0.4rem;"></label>
+      <div style="display: flex; gap: 0.5rem;">
+        <input type="text" id="ai-question-input" class="form-input" style="flex: 1;" placeholder="Your answer...">
+        <button type="button" id="ai-answer-btn" class="btn-primary" style="padding: 0.5rem 1rem;">Answer</button>
+        <button type="button" id="ai-skip-btn" style="background: transparent; border: 1px solid #cbd5e1; color: #64748b; border-radius: 6px; padding: 0.5rem 0.85rem; cursor: pointer;">Skip</button>
+      </div>
+    </div>
+
+    <div id="ai-status-box" style="display: none; font-size: 0.85rem; color: #166534; background: #dcfce7; border: 1px solid #bbf7d0; border-radius: 6px; padding: 0.6rem 0.85rem; margin-top: 0.5rem;">
+      <span id="ai-status-text"></span>
+    </div>
+  </div>
+
+  <form action="/sell" method="POST" enctype="multipart/form-data">
+    <div class="form-group">
+      <label class="form-label" for="title">Title *</label>
+      <input type="text" id="title" name="title" class="form-input" placeholder="e.g. 2019 Toyota Corolla or Sony Headphones" required autofocus>
+    </div>
+
+    <div style="display:grid; grid-template-columns:1fr 1fr; gap:1rem;">
+      <div class="form-group">
+        <label class="form-label" for="category">Category *</label>
+        <select id="category" name="category" class="form-select" required>
+          {% for cat in categories %}
+            <option value="{{ cat }}">{{ cat }}</option>
+          {% endfor %}
+        </select>
+        <div id="ai-category-suggestion" style="font-size: 0.8rem; color: #2563eb; margin-top: 0.35rem; display: none; font-weight: 500;"></div>
+      </div>
+
+      <div class="form-group">
+        <label class="form-label" for="condition">Condition *</label>
+        <select id="condition" name="condition" class="form-select" required>
+          <option value="new">New</option>
+          <option value="like new" selected>Like New</option>
+          <option value="good">Good</option>
+          <option value="fair">Fair</option>
+          <option value="poor">Poor</option>
+        </select>
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label class="form-label" for="price">Price ($) *</label>
+      <input type="number" id="price" name="price" step="0.01" min="0.01" class="form-input" placeholder="49.99" required>
+    </div>
+
+    <div class="form-group">
+      <label class="form-label" for="description">Description</label>
+      <textarea id="description" name="description" class="form-textarea" rows="4" placeholder="Describe the condition, features, or reasons for selling..."></textarea>
+    </div>
+
+    <div class="form-group">
+      <label class="form-label" for="images">Upload Images (Up to 3)</label>
+      <input type="file" id="images" name="images" class="form-input" accept="image/*" multiple>
+      <small style="color:var(--text-muted); font-size:0.8rem;">Select up to 3 JPEG/PNG images.</small>
+    </div>
+
+    <div class="form-group">
+      <label class="form-label" for="extra_details">Extra Details (key: value per line)</label>
+      <textarea
+        id="extra_details"
+        name="extra_details"
+        class="form-textarea"
+        rows="4"
+        placeholder="mileage: 45000&#10;transmission: Automatic&#10;fuelType: Petrol&#10;color: Silver"
+      ></textarea>
+      <small style="color:var(--text-muted); font-size:0.8rem;">Stored neatly as key-value specifications on your listing page.</small>
+    </div>
+
+    <button type="submit" class="btn-primary" style="width:100%; justify-content:center; padding:0.85rem; font-size:1.05rem; margin-top:1rem;">
+      Publish Listing
+    </button>
+  </form>
+</div>
+
+<script>
+  (function() {
+    const titleInput = document.getElementById('title');
+    const descInput = document.getElementById('description');
+    const categorySelect = document.getElementById('category');
+    const suggestionBox = document.getElementById('ai-category-suggestion');
+
+    let userManuallyChangedCategory = false;
+    let debounceTimer = null;
+
+    categorySelect.addEventListener('change', function() {
+      userManuallyChangedCategory = true;
+      suggestionBox.style.display = 'none';
+    });
+
+    function requestCategoryPrediction() {
+      const title = titleInput.value.trim();
+      const description = descInput ? descInput.value.trim() : '';
+
+      if (!title || userManuallyChangedCategory) {
+        return;
+      }
+
+      fetch('/api/predict-category', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ title: title, description: description })
+      })
+      .then(res => res.ok ? res.json() : null)
+      .then(data => {
+        if (!data || !data.category || userManuallyChangedCategory) return;
+
+        const options = Array.from(categorySelect.options);
+        const matchOption = options.find(opt => opt.value === data.category);
+
+        if (matchOption) {
+          categorySelect.value = matchOption.value;
+          const pct = Math.round((data.confidence || 0) * 100);
+          suggestionBox.textContent = `Suggested by AI (${pct}% sure), change it if wrong`;
+          suggestionBox.style.display = 'block';
+        }
+      })
+      .catch(err => console.error('AI category prediction failed:', err));
+    }
+
+    titleInput.addEventListener('input', function() {
+      clearTimeout(debounceTimer);
+      debounceTimer = setTimeout(requestCategoryPrediction, 600);
+    });
+
+    titleInput.addEventListener('blur', function() {
+      clearTimeout(debounceTimer);
+      requestCategoryPrediction();
+    });
+  })();
+</script>
+<script src="/static/sell_ai.js"></script>
+{% endblock %}
+

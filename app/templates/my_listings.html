@@ -1,0 +1,27 @@
+{% extends "base.html" %}
+
+{% block title %}My Listings — Treasury{% endblock %}
+
+{% block content %}
+<div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:2rem;">
+  <div>
+    <h1 style="font-size:1.75rem; font-weight:700;">My Listings</h1>
+    <p style="color:var(--text-muted); font-size:0.95rem;">Items you have posted for sale.</p>
+  </div>
+  <a href="/sell" class="btn-primary">+ Sell Another Item</a>
+</div>
+
+{% if listings %}
+  <div class="listing-grid">
+    {% for listing in listings %}
+      {% include "card.html" %}
+    {% endfor %}
+  </div>
+{% else %}
+  <div style="text-align:center; padding:4rem 1rem; background:var(--bg-card); border-radius:var(--radius); border:1px solid var(--border);">
+    <h3 style="font-size:1.25rem; font-weight:600; margin-bottom:0.5rem;">You haven't listed any items yet</h3>
+    <p style="color:var(--text-muted); margin-bottom:1.5rem;">Sell your unused items to buyers across the platform.</p>
+    <a href="/sell" class="btn-primary">Post Your First Listing</a>
+  </div>
+{% endif %}
+{% endblock %}

@@ -1,0 +1,24 @@
+{% extends "base.html" %}
+
+{% block title %}My Wishlist — Treasury{% endblock %}
+
+{% block content %}
+<div style="margin-bottom: 2rem;">
+  <h1 style="font-size:1.75rem; font-weight:700;">Saved Listings</h1>
+  <p style="color:var(--text-muted); font-size:0.95rem;">All the items you've saved to your wishlist.</p>
+</div>
+
+{% if listings %}
+  <div class="listing-grid">
+    {% for listing in listings %}
+      {% include "card.html" %}
+    {% endfor %}
+  </div>
+{% else %}
+  <div style="text-align:center; padding:4rem 1rem; background:var(--bg-card); border-radius:var(--radius); border:1px solid var(--border);">
+    <h3 style="font-size:1.25rem; font-weight:600; margin-bottom:0.5rem;">Your wishlist is empty</h3>
+    <p style="color:var(--text-muted); margin-bottom:1.5rem;">Explore listings and tap the heart icon on any card to save it here.</p>
+    <a href="/" class="btn-primary">Browse Marketplace</a>
+  </div>
+{% endif %}
+{% endblock %}

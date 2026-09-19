@@ -1,0 +1,35 @@
+{% extends "base.html" %}
+
+{% block title %}Sign In — Treasury{% endblock %}
+
+{% block content %}
+<div class="form-card">
+  <h1 style="font-size:1.5rem; font-weight:700; margin-bottom:1.25rem;">Sign In to Your Account</h1>
+
+  {% if error %}
+    <div class="alert-error">{{ error }}</div>
+  {% endif %}
+
+  <form action="/login" method="POST">
+    <input type="hidden" name="next" value="{{ next }}">
+
+    <div class="form-group">
+      <label class="form-label" for="email">Email Address</label>
+      <input type="email" id="email" name="email" class="form-input" required autofocus>
+    </div>
+
+    <div class="form-group">
+      <label class="form-label" for="password">Password</label>
+      <input type="password" id="password" name="password" class="form-input" required>
+    </div>
+
+    <button type="submit" class="btn-primary" style="width:100%; justify-content:center; padding:0.75rem; font-size:1rem; margin-top:0.5rem;">
+      Log In
+    </button>
+  </form>
+
+  <p style="font-size:0.9rem; color:var(--text-muted); margin-top:1.5rem; text-align:center;">
+    Don't have an account yet? <a href="/signup" style="color:var(--primary); font-weight:600;">Create one here</a>
+  </p>
+</div>
+{% endblock %}
