@@ -13,6 +13,15 @@ from app.routes.ai_routes import router as ai_router
 
 # Initialize the main FastAPI application
 app = FastAPI(title="Treasury Marketplace")
+import os
+from fastapi.responses import PlainTextResponse
+
+@app.middleware("http")
+async def demo_lock(request, call_next):
+    # Public demo: Render's disk resets on restart and I don't want to moderate strangers' listings
+    if os.getenv("DEMO_MODE") == "true" and request.method == "POST" and request.url.path == "/sell":
+        return PlainTextResponse("Listing creation is disabled in the public demo.", status_code=403)
+    return await call_next(request)
 
 # SessionMiddleware signs session cookies with SECRET_KEY for tamper-proof auth
 app.add_middleware(
