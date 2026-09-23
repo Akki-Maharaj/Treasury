@@ -28,7 +28,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     keys.forEach(k => {
       const badge = document.createElement('span');
-      badge.style.cssText = 'background: #e2e8f0; color: #1e293b; padding: 0.2rem 0.5rem; border-radius: 4px; font-size: 0.78rem; font-weight: 500;';
+      badge.className = 'ai-pill-badge';
       badge.textContent = `${k}: ${filled[k]}`;
       filledBadgeContainer.appendChild(badge);
     });

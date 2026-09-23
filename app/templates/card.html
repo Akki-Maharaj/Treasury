@@ -1,10 +1,10 @@
-<div class="listing-card">
+<div class="listing-card" style="--card-index: {{ loop.index0 if loop is defined else 0 }};">
   <div class="card-img-container">
     {% set first_img = listing.images[0].image_url if listing.images and listing.images|length > 0 else '' %}
     {% if first_img.startswith('http') or first_img.startswith('/') %}
-      <img src="{{ first_img }}" alt="{{ listing.title }}" class="card-img" loading="lazy">
+      <img src="{{ first_img }}" alt="{{ listing.title.replace('_', ' ') }}" class="card-img" loading="lazy">
     {% elif first_img %}
-      <img src="/{{ first_img }}" alt="{{ listing.title }}" class="card-img" loading="lazy">
+      <img src="/{{ first_img }}" alt="{{ listing.title.replace('_', ' ') }}" class="card-img" loading="lazy">
     {% else %}
       <div style="display:flex;align-items:center;justify-content:center;height:100%;color:#94a3b8;font-size:0.85rem;">No Image</div>
     {% endif %}
@@ -21,8 +21,16 @@
   </div>
 
   <div class="card-body">
-    <span class="card-category">{{ listing.category }}</span>
-    <a href="/listing/{{ listing.id }}" class="card-title" title="{{ listing.title }}">{{ listing.title }}</a>
-    <div class="card-price">${{ "%.2f"|format(listing.price) }}</div>
+    <div class="card-meta-top">
+      <span class="card-category">{{ listing.category.replace('_', ' ').title() }}</span>
+      {% if listing.condition %}
+        <span class="card-condition-pill">{{ listing.condition }}</span>
+      {% endif %}
+    </div>
+    <a href="/listing/{{ listing.id }}" class="card-title" title="{{ listing.title.replace('_', ' ') }}">{{ listing.title.replace('_', ' ') }}</a>
+    <div class="card-footer">
+      <div class="card-price">${{ "{:,.2f}".format(listing.price) }}</div>
+      <a href="/listing/{{ listing.id }}" class="card-view-btn">View Details →</a>
+    </div>
   </div>
 </div>

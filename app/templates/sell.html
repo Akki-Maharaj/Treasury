@@ -53,7 +53,7 @@
         <label class="form-label" for="category">Category *</label>
         <select id="category" name="category" class="form-select" required>
           {% for cat in categories %}
-            <option value="{{ cat }}">{{ cat }}</option>
+            <option value="{{ cat }}">{{ cat.replace('_', ' ').title() }}</option>
           {% endfor %}
         </select>
         <div id="ai-category-suggestion" style="font-size: 0.8rem; color: #2563eb; margin-top: 0.35rem; display: none; font-weight: 500;"></div>

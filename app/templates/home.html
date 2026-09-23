@@ -3,14 +3,70 @@
 {% block title %}Treasury — Marketplace{% endblock %}
 
 {% block content %}
+<!-- Clean Editorial Top Bar & Quick Actions -->
+<div class="top-bar-container">
+  <div class="top-bar-header">
+    <div>
+      <h1 class="page-headline">Community Marketplace</h1>
+      <p class="page-subline">Browse verified pre-owned items, quality gear, and local finds.</p>
+    </div>
+    <div class="top-bar-cta">
+      <a href="/sell" class="btn-sell-accent">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+          <line x1="12" y1="5" x2="12" y2="19"></line>
+          <line x1="5" y1="12" x2="19" y2="12"></line>
+        </svg>
+        Post a Listing
+      </a>
+    </div>
+  </div>
+
+  <!-- Search & Filter Area -->
+  <div class="search-filter-card">
+    <form action="/" method="GET" class="search-form">
+      {% if selected_category %}
+        <input type="hidden" name="category" value="{{ selected_category }}">
+      {% endif %}
+      <div class="search-input-wrapper">
+        <svg class="search-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <circle cx="11" cy="11" r="8"></circle>
+          <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+        </svg>
+        <input
+          type="text"
+          name="q"
+          class="search-input"
+          placeholder="Search items, brands, models..."
+          value="{{ search_query }}"
+        >
+      </div>
+      <button type="submit" class="btn-primary">Search</button>
+    </form>
+
+    <div class="category-tags">
+      <a href="/{% if search_query %}?q={{ search_query }}{% endif %}" class="category-pill {% if not selected_category %}active{% endif %}">
+        All Items
+      </a>
+      {% for cat in categories %}
+        <a
+          href="/?category={{ cat }}{% if search_query %}&q={{ search_query }}{% endif %}"
+          class="category-pill {% if selected_category == cat %}active{% endif %}"
+        >
+          {{ cat.replace('_', ' ').title() }}
+        </a>
+      {% endfor %}
+    </div>
+  </div>
+</div>
+
 {% if recommended_listings and recommended_listings|length > 0 %}
-<section class="recommended-section" style="margin-bottom: 2rem;">
+<section class="recommended-section" style="margin-bottom: 2.5rem;">
   <div class="recommended-header" style="margin-bottom: 0.75rem;">
     <div>
-      <h2 style="margin: 0; font-size: 1.25rem;">Recommended for you</h2>
+      <h2 style="margin: 0; font-size: 1.25rem;">Curated for You</h2>
       <span style="font-size: 0.85rem; color: #64748b; font-weight: 500;">{{ rec_subtitle }}</span>
     </div>
-    <span class="recommended-badge" style="background:#dbeafe; color:#1e40af; border:1px solid #bfdbfe;">AI Curated</span>
+    <span class="recommended-badge">Special Picks</span>
   </div>
   <div class="horizontal-card-row">
     {% for listing in recommended_listings %}
@@ -19,38 +75,6 @@
   </div>
 </section>
 {% endif %}
-
-
-<!-- Filter and Search Bar -->
-<div class="filter-bar">
-  <form action="/" method="GET" class="search-form">
-    {% if selected_category %}
-      <input type="hidden" name="category" value="{{ selected_category }}">
-    {% endif %}
-    <input
-      type="text"
-      name="q"
-      class="search-input"
-      placeholder="Search listings by title..."
-      value="{{ search_query }}"
-    >
-    <button type="submit" class="btn-primary">Search</button>
-  </form>
-
-  <div class="category-tags">
-    <a href="/{% if search_query %}?q={{ search_query }}{% endif %}" class="category-pill {% if not selected_category %}active{% endif %}">
-      All Categories
-    </a>
-    {% for cat in categories %}
-      <a
-        href="/?category={{ cat }}{% if search_query %}&q={{ search_query }}{% endif %}"
-        class="category-pill {% if selected_category == cat %}active{% endif %}"
-      >
-        {{ cat }}
-      </a>
-    {% endfor %}
-  </div>
-</div>
 
 <!-- Listing Cards Grid -->
 {% if listings %}

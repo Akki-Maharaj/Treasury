@@ -1,6 +1,6 @@
 {% extends "base.html" %}
 
-{% block title %}{{ listing.title }} — Treasury{% endblock %}
+{% block title %}{{ listing.title.replace('_', ' ') }} — Treasury{% endblock %}
 
 {% block content %}
 <div class="detail-container">
@@ -9,9 +9,9 @@
     <div class="gallery-main">
       {% set first_img = listing.images[0].image_url if listing.images and listing.images|length > 0 else '' %}
       {% if first_img.startswith('http') or first_img.startswith('/') %}
-        <img id="main-image" src="{{ first_img }}" alt="{{ listing.title }}">
+        <img id="main-image" src="{{ first_img }}" alt="{{ listing.title.replace('_', ' ') }}">
       {% elif first_img %}
-        <img id="main-image" src="/{{ first_img }}" alt="{{ listing.title }}">
+        <img id="main-image" src="/{{ first_img }}" alt="{{ listing.title.replace('_', ' ') }}">
       {% else %}
         <div style="display:flex;align-items:center;justify-content:center;height:100%;color:#94a3b8;">No Image Available</div>
       {% endif %}
@@ -34,9 +34,9 @@
 
   <!-- Detail Information -->
   <div class="detail-info">
-    <span class="card-category">{{ listing.category }}</span>
-    <h1 style="font-size:1.75rem; font-weight:700; line-height:1.25;">{{ listing.title }}</h1>
-    <div class="detail-price">${{ "%.2f"|format(listing.price) }}</div>
+    <span class="card-category">{{ listing.category.replace('_', ' ').title() }}</span>
+    <h1 style="font-size:1.75rem; font-weight:700; line-height:1.25;">{{ listing.title.replace('_', ' ') }}</h1>
+    <div class="detail-price">${{ "{:,.2f}".format(listing.price) }}</div>
 
     <div style="display:flex; gap:0.75rem; align-items:center;">
       <span style="font-size:0.9rem; background:#e2e8f0; padding:0.25rem 0.6rem; border-radius:6px; font-weight:600;">

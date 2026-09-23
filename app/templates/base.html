@@ -4,7 +4,10 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>{% block title %}Treasury Marketplace{% endblock %}</title>
-  <link rel="stylesheet" href="/static/style.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@500;600;700;800&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/static/style.css?v=5">
 </head>
 <body>
   <nav class="navbar">
@@ -33,6 +36,69 @@
     {% block content %}{% endblock %}
   </main>
 
+  <footer class="site-footer">
+    <div class="footer-container">
+      <div class="footer-grid">
+        <!-- Project Disclaimer & Context -->
+        <div class="footer-col footer-col-main">
+          <div class="footer-brand">Treasury</div>
+          <p class="footer-disclaimer-text">
+            ⚠️ <strong>Portfolio Project Notice:</strong> Treasury is an experimental end-to-end full-stack demonstration created for showcasing AI/ML features, search recommendation models, and clean UI engineering. It is <em>not</em> an active commercial marketplace.
+          </p>
+          <div class="footer-alert-box">
+            Please <strong>do not</strong> enter sensitive personal passwords or post real products for sale. No real payments, deliveries, or buyer communications occur on this site.
+          </div>
+        </div>
+
+        <!-- Connect / Social Links -->
+        <div class="footer-col">
+          <h4 class="footer-col-title">Connect With Me</h4>
+          <ul class="footer-links-list">
+            <li>
+              <a href="https://akki-maharaj.github.io/Portfolio/" target="_blank" rel="noopener noreferrer" class="footer-link">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><line x1="2" y1="12" x2="22" y2="12"></line><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path></svg>
+                Personal Portfolio
+              </a>
+            </li>
+            <li>
+              <a href="https://github.com/Akki-Maharaj" target="_blank" rel="noopener noreferrer" class="footer-link">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"></path></svg>
+                GitHub Profile
+              </a>
+            </li>
+            <li>
+              <a href="https://www.linkedin.com/in/akshat--/" target="_blank" rel="noopener noreferrer" class="footer-link">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"></path><rect x="2" y="9" width="4" height="12"></rect><circle cx="4" cy="4" r="2"></circle></svg>
+                LinkedIn Profile
+              </a>
+            </li>
+          </ul>
+        </div>
+
+        <!-- Resume Downloads -->
+        <div class="footer-col">
+          <h4 class="footer-col-title">Download Resumes</h4>
+          <p class="footer-subtext">Click below to view or download my latest resumes:</p>
+          <div class="resume-buttons-container">
+            <a href="/static/resume/ds_resume.pdf" download="Akshat_Data_Science_Resume.pdf" class="btn-resume">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
+              Data Science Resume (PDF)
+            </a>
+            <a href="/static/resume/da_resume.pdf" download="Akshat_Data_Analyst_Resume.pdf" class="btn-resume">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
+              Data Analyst Resume (PDF)
+            </a>
+          </div>
+        </div>
+      </div>
+
+      <div class="footer-bottom-bar">
+        <span>Designed & Developed by Akshat</span>
+        <span>Treasury &bull; Experimental Demo</span>
+      </div>
+    </div>
+  </footer>
+
   <script>
     // AJAX wishlist toggle handler without page reload
     function toggleWishlist(listingId, btnElement) {
@@ -57,6 +123,28 @@
       })
       .catch(err => console.error('Wishlist error:', err));
     }
+
+    // Scroll-triggered Reveal Animations
+    document.addEventListener('DOMContentLoaded', () => {
+      const revealItems = document.querySelectorAll('.listing-card, .recommended-section');
+      if ('IntersectionObserver' in window) {
+        const observer = new IntersectionObserver((entries, obs) => {
+          entries.forEach(entry => {
+            if (entry.isIntersecting) {
+              entry.target.classList.add('is-visible');
+              obs.unobserve(entry.target);
+            }
+          });
+        }, {
+          threshold: 0.1,
+          rootMargin: '0px 0px -40px 0px'
+        });
+
+        revealItems.forEach(el => observer.observe(el));
+      } else {
+        revealItems.forEach(el => el.classList.add('is-visible'));
+      }
+    });
   </script>
 </body>
 </html>
