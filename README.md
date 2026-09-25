@@ -4,7 +4,7 @@
 
 Treasury is an OLX-style thrift marketplace with AI built into the core flows: listing a product and finding one. Sellers describe an item in plain text and the app detects the category, fills in the details it can, and asks only for what's missing. Buyers get a personalized feed and "similar items" powered by sentence embeddings.
 
-**Live demo:** https://YOUR-RENDER-URL.onrender.com
+**Live demo:** [https://treasury-1.onrender.com](https://treasury-1.onrender.com/)
 (free hosting, so the first load after a quiet period can take a few seconds)
 
 > Demo login: `buyer1@demo.com` / `demo1234`
